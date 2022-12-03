@@ -1,4 +1,4 @@
-package com.fakhry.movie_compose.presentation
+package com.fakhry.movie_compose.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ListMovieViewModel(private val repository: MovieRepository) : ViewModel() {
-    private val _listMovieState = MutableStateFlow<UiStateWrapper<List<Movie>>>(UiStateWrapper.Initial)
+class HomeViewModel(private val repository: MovieRepository) : ViewModel() {
+    private val _listMovieState =
+        MutableStateFlow<UiStateWrapper<List<Movie>>>(UiStateWrapper.Initial)
     val listMovieState = _listMovieState.asStateFlow()
 
     fun fetchListMovie() {

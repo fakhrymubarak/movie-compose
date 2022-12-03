@@ -1,6 +1,8 @@
-package com.fakhry.movie_compose.room
+package com.fakhry.movie_compose.data.database.room
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
 import com.fakhry.movie_compose.data.database.entity.MovieEntity
 
 @Dao

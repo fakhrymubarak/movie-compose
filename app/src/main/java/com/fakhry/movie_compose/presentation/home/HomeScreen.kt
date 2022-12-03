@@ -1,4 +1,4 @@
-package com.fakhry.movie_compose.presentation
+package com.fakhry.movie_compose.presentation.home
 
 import android.widget.Toast
 import androidx.compose.animation.*
@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -25,34 +26,29 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.fakhry.movie_compose.R
-import com.fakhry.movie_compose.common.theme.MovieComposeTheme
 import com.fakhry.movie_compose.common.values.radiusRegular
-import com.fakhry.movie_compose.common.values.spacingRegular
 import com.fakhry.movie_compose.common.values.spacingSmaller
 import com.fakhry.movie_compose.core.factory.ViewModelFactory
 import com.fakhry.movie_compose.core.utils.UiStateWrapper
 import com.fakhry.movie_compose.core.utils.asString
-import com.fakhry.movie_compose.di.Injection
 import com.fakhry.movie_compose.domain.model.Movie
 import kotlinx.coroutines.launch
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListMovieApp(
+fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: ListMovieViewModel = viewModel(
-        factory = ViewModelFactory(Injection.provideRepository(LocalContext.current))
-    )
+    viewModel: HomeViewModel = viewModel(
+        factory = ViewModelFactory.getInstance(LocalContext.current)
+    ),
+    navigateToDetail: (Int) -> Unit,
 ) {
     val context = LocalContext.current
-    val listMoviesState by viewModel.listMovieState.collectAsState()
+    val listMovieState = viewModel.listMovieState.collectAsState()
 
     Box(modifier = modifier) {
         val scope = rememberCoroutineScope()
@@ -60,26 +56,17 @@ fun ListMovieApp(
         val showButton: Boolean by remember {
             derivedStateOf { listState.firstVisibleItemIndex > 0 }
         }
-        LazyColumn(
-            state = listState,
-            contentPadding = PaddingValues(bottom = 80.dp)
-        ) {
-            when (val state: UiStateWrapper<List<Movie>> = listMoviesState) {
+
+        listMovieState.value.let { state ->
+            when (state) {
                 UiStateWrapper.Initial -> viewModel.fetchListMovie()
                 is UiStateWrapper.Loading -> {}
                 is UiStateWrapper.Success -> {
-                    val movies = state.data
-
-                    items(movies, key = { it.id }) { movie ->
-                        MovieItem(
-                            title = movie.title,
-                            overview = movie.overview,
-                            posterUrl = movie.posterPath,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .animateItemPlacement(tween(durationMillis = 100))
-                        )
-                    }
+                    HomeScreenContent(
+                        listState = listState,
+                        movies = state.data,
+                        navigateToDetail = navigateToDetail
+                    )
                 }
                 is UiStateWrapper.Error -> Toast.makeText(
                     context,
@@ -88,7 +75,6 @@ fun ListMovieApp(
                 ).show()
             }
         }
-
         AnimatedVisibility(
             visible = showButton,
             enter = fadeIn() + slideInVertically(),
@@ -108,23 +94,47 @@ fun ListMovieApp(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun HomeScreenContent(
+    listState: LazyListState,
+    movies: List<Movie>,
+    modifier: Modifier = Modifier,
+    navigateToDetail: (Int) -> Unit,
+) {
+    LazyColumn(
+        state = listState,
+        contentPadding = PaddingValues(bottom = 80.dp)
+    ) {
+        items(movies, key = { it.id }) { movie ->
+            MovieItem(
+                movie = movie,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .animateItemPlacement(tween(durationMillis = 100)),
+                navigateToDetail = navigateToDetail
+            )
+        }
+    }
+}
+
+
 @Composable
 fun MovieItem(
-    title: String,
-    overview: String,
-    posterUrl: String,
-    modifier: Modifier = Modifier
+    movie: Movie,
+    modifier: Modifier = Modifier,
+    navigateToDetail: (Int) -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.Top,
         modifier = modifier
-            .clickable {}
+            .clickable { navigateToDetail(movie.id) }
             .height(IntrinsicSize.Min)
             .padding(PaddingValues(vertical = spacingSmaller))
 
     ) {
         AsyncImage(
-            model = posterUrl,
+            model = movie.posterPath,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -141,7 +151,7 @@ fun MovieItem(
 
         ) {
             Text(
-                text = title,
+                text = movie.title,
                 fontWeight = FontWeight.Medium,
                 fontSize = 18.sp,
                 modifier = Modifier
@@ -149,7 +159,7 @@ fun MovieItem(
                     .height(IntrinsicSize.Min)
             )
             Text(
-                text = overview,
+                text = movie.overview,
                 fontWeight = FontWeight.Normal,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 3,
@@ -185,14 +195,14 @@ fun ScrollToTopButton(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun HeroListItemPreview() {
-    MovieComposeTheme {
-        MovieItem(
-            title = "Hello World",
-            posterUrl = "",
-            overview = "Lorem Lorem Lorem Ipsum Lorem Lorem Lorem Ipsum Lorem Lorem Lorem Ipsum Lorem Lorem Lorem Ipsum Lorem Lorem Lorem Ipsum Lorem Lorem Lorem Ipsum"
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MovieItemPreview() {
+//    MovieComposeTheme {
+//        MovieItem(
+//            movie = MovieEntity.generateDummyMovieEntity().first().toMovie(),
+//            navigateToDetail = (0) {}
+//        )
+//    }
+//}
+//

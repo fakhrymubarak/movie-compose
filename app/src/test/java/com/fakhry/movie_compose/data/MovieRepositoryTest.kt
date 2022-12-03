@@ -2,8 +2,8 @@ package com.fakhry.movie_compose.data
 
 import com.fakhry.movie_compose.core.utils.UiText
 import com.fakhry.movie_compose.data.database.entity.MovieEntity
-import com.fakhry.movie_compose.room.MovieDao
-import com.fakhry.movie_compose.room.MovieDatabase
+import com.fakhry.movie_compose.data.database.room.MovieDao
+import com.fakhry.movie_compose.data.database.room.MovieDatabase
 import com.fakhry.movie_compose.data.repository.MovieRepositoryImpl
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.take

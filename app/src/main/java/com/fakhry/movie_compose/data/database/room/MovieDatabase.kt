@@ -1,4 +1,4 @@
-package com.fakhry.movie_compose.room
+package com.fakhry.movie_compose.data.database.room
 
 import android.content.Context
 import androidx.room.Database

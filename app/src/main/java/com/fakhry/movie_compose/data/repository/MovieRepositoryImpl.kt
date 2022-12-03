@@ -3,7 +3,7 @@ package com.fakhry.movie_compose.data.repository
 import com.fakhry.movie_compose.core.utils.UiText
 import com.fakhry.movie_compose.data.Resource
 import com.fakhry.movie_compose.data.database.entity.MovieEntity
-import com.fakhry.movie_compose.room.MovieDatabase
+import com.fakhry.movie_compose.data.database.room.MovieDatabase
 import com.fakhry.movie_compose.domain.model.Movie
 import com.fakhry.movie_compose.domain.model.MovieDetails
 import com.fakhry.movie_compose.domain.repository.MovieRepository

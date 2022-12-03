@@ -1,7 +1,7 @@
 package com.fakhry.movie_compose.di
 
 import android.content.Context
-import com.fakhry.movie_compose.room.MovieDatabase
+import com.fakhry.movie_compose.data.database.room.MovieDatabase
 import com.fakhry.movie_compose.data.repository.MovieRepositoryImpl
 import com.fakhry.movie_compose.domain.repository.MovieRepository
 

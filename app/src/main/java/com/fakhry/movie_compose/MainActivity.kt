@@ -8,7 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.fakhry.movie_compose.common.theme.MovieComposeTheme
-import com.fakhry.movie_compose.presentation.ListMovieApp
+import com.fakhry.movie_compose.presentation.MovieComposeApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    ListMovieApp()
+                    MovieComposeApp()
                 }
             }
         }
