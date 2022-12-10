@@ -46,22 +46,18 @@ fun HomeScreen(
         factory = ViewModelFactory.getInstance(LocalContext.current)
     ),
     navigateToDetail: (Int) -> Unit,
+    navigateToAbout: () -> Unit,
 ) {
     val context = LocalContext.current
     val listMovieState = viewModel.listMovieState.collectAsState()
 
-
-
     Scaffold(
-        topBar = {
-            MyTopBar(
-                onMenuClick = {
-                }
-            )
-        },
+        topBar = { AppBarHome(navigateToAbout = { navigateToAbout() }) },
     ) { paddingValues ->
         Box(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
             Box(modifier = modifier) {
@@ -111,11 +107,11 @@ fun HomeScreen(
 }
 
 @Composable
-fun MyTopBar(onMenuClick: () -> Unit) {
+fun AppBarHome(navigateToAbout: () -> Unit) {
     TopAppBar(
         actions = {
             IconButton(onClick = {
-                onMenuClick()
+                navigateToAbout()
             }) {
                 Icon(
                     imageVector = Icons.Filled.Person,
@@ -227,16 +223,3 @@ fun ScrollToTopButton(
         )
     }
 }
-
-
-//@Preview(showBackground = true)
-//@Composable
-//fun MovieItemPreview() {
-//    MovieComposeTheme {
-//        MovieItem(
-//            movie = MovieEntity.generateDummyMovieEntity().first().toMovie(),
-//            navigateToDetail = {}
-//        )
-//    }
-//}
-//
