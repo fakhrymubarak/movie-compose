@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,48 +50,83 @@ fun HomeScreen(
     val context = LocalContext.current
     val listMovieState = viewModel.listMovieState.collectAsState()
 
-    Box(modifier = modifier) {
-        val scope = rememberCoroutineScope()
-        val listState = rememberLazyListState()
-        val showButton: Boolean by remember {
-            derivedStateOf { listState.firstVisibleItemIndex > 0 }
-        }
 
-        listMovieState.value.let { state ->
-            when (state) {
-                UiStateWrapper.Initial -> viewModel.fetchListMovie()
-                is UiStateWrapper.Loading -> {}
-                is UiStateWrapper.Success -> {
-                    HomeScreenContent(
-                        listState = listState,
-                        movies = state.data,
-                        navigateToDetail = navigateToDetail
-                    )
-                }
-                is UiStateWrapper.Error -> Toast.makeText(
-                    context,
-                    state.uiText.asString(context),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-        AnimatedVisibility(
-            visible = showButton,
-            enter = fadeIn() + slideInVertically(),
-            exit = fadeOut() + slideOutVertically(),
-            modifier = Modifier
-                .padding(bottom = 30.dp)
-                .align(Alignment.BottomCenter)
-        ) {
-            ScrollToTopButton(
-                onClick = {
-                    scope.launch {
-                        listState.animateScrollToItem(index = 0)
-                    }
+
+    Scaffold(
+        topBar = {
+            MyTopBar(
+                onMenuClick = {
                 }
             )
+        },
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(modifier = modifier) {
+                val scope = rememberCoroutineScope()
+                val listState = rememberLazyListState()
+                val showButton: Boolean by remember {
+                    derivedStateOf { listState.firstVisibleItemIndex > 0 }
+                }
+
+                listMovieState.value.let { state ->
+                    when (state) {
+                        UiStateWrapper.Initial -> viewModel.fetchListMovie()
+                        is UiStateWrapper.Loading -> {}
+                        is UiStateWrapper.Success -> {
+                            HomeScreenContent(
+                                listState = listState,
+                                movies = state.data,
+                                navigateToDetail = navigateToDetail
+                            )
+                        }
+                        is UiStateWrapper.Error -> Toast.makeText(
+                            context,
+                            state.uiText.asString(context),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                AnimatedVisibility(
+                    visible = showButton,
+                    enter = fadeIn() + slideInVertically(),
+                    exit = fadeOut() + slideOutVertically(),
+                    modifier = Modifier
+                        .padding(bottom = 30.dp)
+                        .align(Alignment.BottomCenter)
+                ) {
+                    ScrollToTopButton(
+                        onClick = {
+                            scope.launch {
+                                listState.animateScrollToItem(index = 0)
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
+}
+
+@Composable
+fun MyTopBar(onMenuClick: () -> Unit) {
+    TopAppBar(
+        actions = {
+            IconButton(onClick = {
+                onMenuClick()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = stringResource(R.string.about_page)
+                )
+            }
+        },
+        title = {
+            Text(stringResource(R.string.app_name))
+        },
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
