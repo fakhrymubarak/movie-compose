@@ -61,6 +61,7 @@ fun MovieDetailsScreen(
         when (state) {
             UiStateWrapper.Initial -> viewModel.fetchMovieDetails(movieId)
             is UiStateWrapper.Loading -> {}
+            is UiStateWrapper.Empty -> {}
             is UiStateWrapper.Success -> {
                 LazyColumn {
                     val data = state.data

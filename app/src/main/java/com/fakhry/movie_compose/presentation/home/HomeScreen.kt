@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,6 +35,7 @@ import coil.compose.AsyncImage
 import com.fakhry.movie_compose.R
 import com.fakhry.movie_compose.common.theme.SansSerif
 import com.fakhry.movie_compose.common.values.radiusRegular
+import com.fakhry.movie_compose.common.values.spacingRegular
 import com.fakhry.movie_compose.common.values.spacingSmaller
 import com.fakhry.movie_compose.core.factory.ViewModelFactory
 import com.fakhry.movie_compose.core.utils.UiStateWrapper
@@ -84,6 +86,14 @@ fun HomeScreen(
                             when (state) {
                                 UiStateWrapper.Initial -> viewModel.fetchListMovie()
                                 is UiStateWrapper.Loading -> CircularProgressIndicator()
+                                is UiStateWrapper.Empty -> Text(
+                                    text = "List Movie is Empty",
+                                    textAlign = TextAlign.Center,
+                                    style = SansSerif.Sp14.Regular,
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .padding(top = spacingRegular)
+                                )
                                 is UiStateWrapper.Success -> {
                                     HomeScreenContent(
                                         listState = listState,

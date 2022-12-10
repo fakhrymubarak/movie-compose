@@ -46,7 +46,10 @@ class HomeViewModel(private val repository: MovieRepository) : ViewModel() {
                     Resource.Loading -> _listMovieState.emit(UiStateWrapper.Loading(true))
                     is Resource.Success -> {
                         _listMovieState.emit(UiStateWrapper.Loading(false))
-                        _listMovieState.emit(UiStateWrapper.Success(resource.data))
+                        _listMovieState.emit(
+                            if (resource.data.isNotEmpty()) UiStateWrapper.Success(resource.data)
+                            else UiStateWrapper.Empty
+                        )
                     }
                     is Resource.Error -> {
                         _listMovieState.emit(UiStateWrapper.Loading(false))
