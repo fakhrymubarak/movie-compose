@@ -1,7 +1,10 @@
 package com.fakhry.movie_compose.presentation.about
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -12,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
@@ -51,6 +55,9 @@ fun AboutScreen(
 
 @Composable
 fun ProfileCompose(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val emailAddress = "fakhrymubarak@gmail.com"
+    val emailSubject = "Your Dicoding Submission Has Been Checked!"
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth()
@@ -76,9 +83,18 @@ fun ProfileCompose(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(horizontal = spacingRegular, vertical = spacingTiny)
             )
             Text(
-                text = "fakhrymubarak@gmail.com",
+                text = emailAddress,
                 style = SansSerif.Sp14.Regular,
-                modifier = Modifier.padding(horizontal = spacingRegular, vertical = spacingTiny)
+                modifier = Modifier
+                    .padding(horizontal = spacingRegular, vertical = spacingTiny)
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:")
+                            putExtra(Intent.EXTRA_EMAIL, emailAddress)
+                            putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+                        }
+                        context.startActivity(intent)
+                    }
             )
         }
     }
