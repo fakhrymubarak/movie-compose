@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
     fun getListMovie(): Flow<Resource<List<Movie>>>
+    fun queryMovie(query: String): Flow<Resource<List<Movie>>>
     fun getMovieDetails(id: Int): Flow<Resource<MovieDetails>>
     fun deleteMovie(movie: Movie): Flow<Resource<Boolean>>
 }

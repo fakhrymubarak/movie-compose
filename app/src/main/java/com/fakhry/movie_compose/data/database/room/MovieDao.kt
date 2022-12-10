@@ -14,6 +14,9 @@ interface MovieDao {
     @Query("SELECT * FROM movie_entities ORDER BY id_movie ASC")
     fun getListMovies(): List<MovieEntity>
 
+    @Query("SELECT * FROM movie_entities WHERE title LIKE '%' || :query || '%' ORDER BY id_movie ASC")
+    fun getListMovies(query: String): List<MovieEntity>
+
     @Query("SELECT * FROM movie_entities WHERE id_movie = :movieId")
     fun getMovieDetails(movieId: Int): MovieEntity?
 

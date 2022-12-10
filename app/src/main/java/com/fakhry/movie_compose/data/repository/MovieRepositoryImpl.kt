@@ -32,6 +32,21 @@ class MovieRepositoryImpl(
         }
     }.flowOn(Dispatchers.IO)
 
+    override fun queryMovie(query: String): Flow<Resource<List<Movie>>> = flow {
+        emit(Resource.Loading)
+        val listMovie = database.movieDao().getListMovies(query = query)
+        try {
+            if (listMovie.isEmpty()) {
+                emit(Resource.Success(listMovie.map { it.toMovie() }))
+                return@flow
+            }
+            emit(Resource.Success(listMovie.map { it.toMovie() }))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(Resource.Error(UiText.DynamicString(e.message ?: "UnkownError")))
+        }
+    }.flowOn(Dispatchers.IO)
+
     override fun getMovieDetails(id: Int): Flow<Resource<MovieDetails>> = flow {
         emit(Resource.Loading)
         val movie = database.movieDao().getMovieDetails(id)

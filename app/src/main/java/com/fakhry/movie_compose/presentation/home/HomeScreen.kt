@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +17,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,31 +62,45 @@ fun HomeScreen(
                 .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
+            val query by viewModel.query
+
             Box(modifier = modifier) {
                 val scope = rememberCoroutineScope()
                 val listState = rememberLazyListState()
                 val showButton: Boolean by remember {
                     derivedStateOf { listState.firstVisibleItemIndex > 0 }
                 }
-
-                listMovieState.value.let { state ->
-                    when (state) {
-                        UiStateWrapper.Initial -> viewModel.fetchListMovie()
-                        is UiStateWrapper.Loading -> {}
-                        is UiStateWrapper.Success -> {
-                            HomeScreenContent(
-                                listState = listState,
-                                movies = state.data,
-                                navigateToDetail = navigateToDetail
-                            )
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    modifier = modifier
+                ) {
+                    SearchBar(
+                        query = query,
+                        onQueryChange = viewModel::queryMovies,
+                        modifier = Modifier.background(MaterialTheme.colors.primary)
+                    )
+                    Box(modifier = modifier.fillMaxHeight()) {
+                        listMovieState.value.let { state ->
+                            when (state) {
+                                UiStateWrapper.Initial -> viewModel.fetchListMovie()
+                                is UiStateWrapper.Loading -> CircularProgressIndicator()
+                                is UiStateWrapper.Success -> {
+                                    HomeScreenContent(
+                                        listState = listState,
+                                        movies = state.data,
+                                        navigateToDetail = navigateToDetail
+                                    )
+                                }
+                                is UiStateWrapper.Error -> Toast.makeText(
+                                    context,
+                                    state.uiText.asString(context),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
-                        is UiStateWrapper.Error -> Toast.makeText(
-                            context,
-                            state.uiText.asString(context),
-                            Toast.LENGTH_LONG
-                        ).show()
                     }
                 }
+
                 AnimatedVisibility(
                     visible = showButton,
                     enter = fadeIn() + slideInVertically(),
@@ -122,6 +138,39 @@ fun AppBarHome(navigateToAbout: () -> Unit) {
         title = {
             Text(stringResource(R.string.app_name))
         },
+    )
+}
+
+
+@Composable
+fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        value = query,
+        onValueChange = onQueryChange,
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null
+            )
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = MaterialTheme.colors.surface,
+            disabledIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
+        placeholder = {
+            Text(stringResource(R.string.search_movie))
+        },
+        modifier = modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .heightIn(min = 48.dp)
+            .clip(RoundedCornerShape(16.dp))
     )
 }
 
