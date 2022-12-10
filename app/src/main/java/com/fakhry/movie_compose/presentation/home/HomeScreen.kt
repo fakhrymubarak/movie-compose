@@ -24,13 +24,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.fakhry.movie_compose.R
+import com.fakhry.movie_compose.common.theme.SansSerif
 import com.fakhry.movie_compose.common.values.radiusRegular
 import com.fakhry.movie_compose.common.values.spacingSmaller
 import com.fakhry.movie_compose.core.factory.ViewModelFactory
@@ -152,15 +151,14 @@ fun MovieItem(
         ) {
             Text(
                 text = movie.title,
-                fontWeight = FontWeight.Medium,
-                fontSize = 18.sp,
+                style = SansSerif.Sp16.Bold,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min)
             )
             Text(
                 text = movie.overview,
-                fontWeight = FontWeight.Normal,
+                style = SansSerif.Sp14.Regular,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 3,
                 modifier = Modifier
@@ -201,7 +199,7 @@ fun ScrollToTopButton(
 //    MovieComposeTheme {
 //        MovieItem(
 //            movie = MovieEntity.generateDummyMovieEntity().first().toMovie(),
-//            navigateToDetail = (0) {}
+//            navigateToDetail = {}
 //        )
 //    }
 //}

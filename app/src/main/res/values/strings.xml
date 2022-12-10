@@ -3,4 +3,6 @@
 
     <string name="text_error_unknown">Error tidak diketahui.</string>
     <string name="scroll_to_top">Scroll to Top</string>`
+    <string name="back">Kembali</string>`
+    <string name="star">Vote Average</string>`
 </resources>
