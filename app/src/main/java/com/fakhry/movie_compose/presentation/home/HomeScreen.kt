@@ -38,7 +38,7 @@ import com.fakhry.movie_compose.common.values.radiusRegular
 import com.fakhry.movie_compose.common.values.spacingRegular
 import com.fakhry.movie_compose.common.values.spacingSmaller
 import com.fakhry.movie_compose.core.factory.ViewModelFactory
-import com.fakhry.movie_compose.core.utils.UiStateWrapper
+import com.fakhry.movie_compose.core.utils.UiState
 import com.fakhry.movie_compose.core.utils.asString
 import com.fakhry.movie_compose.domain.model.Movie
 import kotlinx.coroutines.launch
@@ -84,9 +84,9 @@ fun HomeScreen(
                     Box(modifier = modifier.fillMaxHeight()) {
                         listMovieState.value.let { state ->
                             when (state) {
-                                UiStateWrapper.Initial -> viewModel.fetchListMovie()
-                                is UiStateWrapper.Loading -> CircularProgressIndicator()
-                                is UiStateWrapper.Empty -> Text(
+                                UiState.Initial -> viewModel.fetchListMovie()
+                                is UiState.Loading -> CircularProgressIndicator()
+                                is UiState.Empty -> Text(
                                     text = "List Movie is Empty",
                                     textAlign = TextAlign.Center,
                                     style = SansSerif.Sp14.Regular,
@@ -94,14 +94,14 @@ fun HomeScreen(
                                         .fillMaxWidth()
                                         .padding(top = spacingRegular)
                                 )
-                                is UiStateWrapper.Success -> {
+                                is UiState.Success -> {
                                     HomeScreenContent(
                                         listState = listState,
                                         movies = state.data,
                                         navigateToDetail = navigateToDetail
                                     )
                                 }
-                                is UiStateWrapper.Error -> Toast.makeText(
+                                is UiState.Error -> Toast.makeText(
                                     context,
                                     state.uiText.asString(context),
                                     Toast.LENGTH_LONG

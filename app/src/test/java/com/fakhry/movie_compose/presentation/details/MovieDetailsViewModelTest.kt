@@ -1,6 +1,6 @@
 package com.fakhry.movie_compose.presentation.details
 
-import com.fakhry.movie_compose.core.utils.UiStateWrapper
+import com.fakhry.movie_compose.core.utils.UiState
 import com.fakhry.movie_compose.core.utils.UiText
 import com.fakhry.movie_compose.data.Resource
 import com.fakhry.movie_compose.data.dummy.movieDetails
@@ -27,14 +27,14 @@ class MovieDetailsViewModelTest {
 
 
     private lateinit var viewModel: MovieDetailsViewModel
-    private lateinit var movieDetailsState: UiStateWrapper<MovieDetails>
+    private lateinit var movieDetailsState: UiState<MovieDetails>
 
     private var repository = mock(MovieRepository::class.java)
 
     @Before
     fun setUp() {
         viewModel = MovieDetailsViewModel(repository)
-        movieDetailsState = UiStateWrapper.Initial
+        movieDetailsState = UiState.Initial
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -56,10 +56,10 @@ class MovieDetailsViewModelTest {
 
         // assert
         observer.assertValuesAndFinish(
-            UiStateWrapper.Initial,
-            UiStateWrapper.Loading(true),
-            UiStateWrapper.Loading(false),
-            UiStateWrapper.Success(movieDetails)
+            UiState.Initial,
+            UiState.Loading(true),
+            UiState.Loading(false),
+            UiState.Success(movieDetails)
         )
     }
 
@@ -82,10 +82,10 @@ class MovieDetailsViewModelTest {
 
         // assert
         observer.assertValuesAndFinish(
-            UiStateWrapper.Initial,
-            UiStateWrapper.Loading(true),
-            UiStateWrapper.Loading(false),
-            UiStateWrapper.Error(uiText = UiText.unknownError())
+            UiState.Initial,
+            UiState.Loading(true),
+            UiState.Loading(false),
+            UiState.Error(uiText = UiText.unknownError())
         )
     }
 }

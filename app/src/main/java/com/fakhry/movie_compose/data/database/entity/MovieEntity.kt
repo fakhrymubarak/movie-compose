@@ -1,6 +1,5 @@
 package com.fakhry.movie_compose.data.database.entity
 
-import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -12,7 +11,6 @@ import com.fakhry.movie_compose.domain.model.MovieDetails
 @Entity(tableName = "movie_entities")
 data class MovieEntity(
     @PrimaryKey
-    @NonNull
     @ColumnInfo(name = "id_movie")
     var movieId: Int,
 

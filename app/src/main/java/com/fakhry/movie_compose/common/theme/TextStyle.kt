@@ -20,8 +20,6 @@ object SansSerif {
     object Sp16 {
         private val size = 16.sp
 
-        val Regular =
-            TextStyle(fontFamily = sansSerif, fontSize = size, fontWeight = FontWeight.W400)
         val Bold = TextStyle(fontFamily = sansSerif, fontSize = size, fontWeight = FontWeight.W500)
     }
 }

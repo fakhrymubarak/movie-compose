@@ -2,7 +2,6 @@ package com.fakhry.movie_compose.presentation.details
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,14 +38,12 @@ import com.fakhry.movie_compose.common.values.radiusRegular
 import com.fakhry.movie_compose.common.values.spacingRegular
 import com.fakhry.movie_compose.common.values.spacingSmaller
 import com.fakhry.movie_compose.core.factory.ViewModelFactory
-import com.fakhry.movie_compose.core.utils.UiStateWrapper
+import com.fakhry.movie_compose.core.utils.UiState
 import com.fakhry.movie_compose.core.utils.asString
 import com.fakhry.movie_compose.data.database.entity.MovieEntity
 import com.fakhry.movie_compose.domain.model.MovieDetails
 import com.fakhry.movie_compose.presentation.component.debugPlaceholder
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,
@@ -59,10 +56,10 @@ fun MovieDetailsScreen(
     val movieState = viewModel.movieDetailsState.collectAsState()
     movieState.value.let { state ->
         when (state) {
-            UiStateWrapper.Initial -> viewModel.fetchMovieDetails(movieId)
-            is UiStateWrapper.Loading -> {}
-            is UiStateWrapper.Empty -> {}
-            is UiStateWrapper.Success -> {
+            UiState.Initial -> viewModel.fetchMovieDetails(movieId)
+            is UiState.Loading -> {}
+            is UiState.Empty -> {}
+            is UiState.Success -> {
                 LazyColumn {
                     val data = state.data
                     item {
@@ -71,7 +68,7 @@ fun MovieDetailsScreen(
                     }
                 }
             }
-            is UiStateWrapper.Error -> Toast.makeText(
+            is UiState.Error -> Toast.makeText(
                 context,
                 state.uiText.asString(context),
                 Toast.LENGTH_LONG

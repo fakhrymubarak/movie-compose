@@ -2,7 +2,6 @@ package com.fakhry.movie_compose.presentation.about
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,8 +29,6 @@ import com.fakhry.movie_compose.common.values.spacingSmaller
 import com.fakhry.movie_compose.common.values.spacingTiny
 import com.fakhry.movie_compose.presentation.component.AppBarDefault
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AboutScreen(
     navigateBack: () -> Unit,

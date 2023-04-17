@@ -1,6 +1,6 @@
 package com.fakhry.movie_compose.presentation
 
-import com.fakhry.movie_compose.core.utils.UiStateWrapper
+import com.fakhry.movie_compose.core.utils.UiState
 import com.fakhry.movie_compose.core.utils.UiText
 import com.fakhry.movie_compose.data.Resource
 import com.fakhry.movie_compose.data.dummy.listMovie
@@ -28,14 +28,14 @@ class ListMovieViewModelTest {
 
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var listMovieState: UiStateWrapper<List<Movie>>
+    private lateinit var listMovieState: UiState<List<Movie>>
 
     private var repository = mock(MovieRepository::class.java)
 
     @Before
     fun setUp() {
         viewModel = HomeViewModel(repository)
-        listMovieState = UiStateWrapper.Initial
+        listMovieState = UiState.Initial
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -57,10 +57,10 @@ class ListMovieViewModelTest {
 
         // assert
         observer.assertValuesAndFinish(
-            UiStateWrapper.Initial,
-            UiStateWrapper.Loading(true),
-            UiStateWrapper.Loading(false),
-            UiStateWrapper.Success(listMovie)
+            UiState.Initial,
+            UiState.Loading(true),
+            UiState.Loading(false),
+            UiState.Success(listMovie)
         )
     }
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -82,10 +82,10 @@ class ListMovieViewModelTest {
 
         // assert
         observer.assertValuesAndFinish(
-            UiStateWrapper.Initial,
-            UiStateWrapper.Loading(true),
-            UiStateWrapper.Loading(false),
-            UiStateWrapper.Error(uiText = UiText.unknownError())
+            UiState.Initial,
+            UiState.Loading(true),
+            UiState.Loading(false),
+            UiState.Error(uiText = UiText.unknownError())
         )
     }
 }
