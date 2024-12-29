@@ -20,6 +20,8 @@ class HomeViewModel(private val repository: MovieRepository) : ViewModel() {
     val listMovieState = _listMovieState.asStateFlow()
 
     fun fetchListMovie() {
+
+        println("fetch list movie")
         viewModelScope.launch {
             repository.getListMovie().collect { resource ->
                 when (resource) {
